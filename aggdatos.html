@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>aggatos</title>
+</head>
+
+<body>
+    <form id="formulario">
+        <label for="imagen">Imagen:</label>
+        <input type="text" id="imagen" name="imagen"><br><br>
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion" name="descripcion"></textarea><br><br>
+        <button id="agregar">Agregar</button>
+    </form>
+
+    <script>
+        const formulario = document.getElementById('formulario');
+        formulario.addEventListener('submit', agregarDatos);
+
+        function agregarDatos(e) {
+            e.preventDefault();
+            const imagen = document.getElementById('imagen').value;
+            const descripcion = document.getElementById('descripcion').value;
+            const nuevoDatos = { imagen, descripcion };
+            agregarDatosAlJSON(nuevoDatos);
+        }
+
+        function agregarDatosAlJSON(nuevoDatos) {
+            fetch('datos.json')
+                .then(response => response.json())
+                .then(datos => {
+                    datos.push(nuevoDatos);
+                    fetch('datos.json', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(datos)
+                    });
+                });
+        }
+    </script>
+</body>
+
+</html>
